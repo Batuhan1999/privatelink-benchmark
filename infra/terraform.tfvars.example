@@ -1,0 +1,6 @@
+aws_profile                      = "privatelink-benchmark"
+aws_region                       = "eu-central-1"
+availability_zone                = "eu-central-1a"
+planetscale_private_service_name = "com.amazonaws.vpce.eu-central-1.vpce-svc-REPLACE_ME"
+ssh_public_key_path              = "../.secrets/benchmark_ed25519.pub"
+instance_type                    = "c7g.large"

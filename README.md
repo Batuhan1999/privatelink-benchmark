@@ -60,8 +60,11 @@ minutes. Neither path produced an error or timeout.
 ## Results
 
 Each pair contains one public and one PrivateLink measurement for the same
-payload, with their order randomized. The paired p50 delta is calculated as
-`PrivateLink - public`, so a negative value means PrivateLink was faster.
+payload, with their order randomized. The paired deltas are percentiles of the
+10,000 pairwise differences, not differences between each path's standalone
+percentiles. They are calculated as `PrivateLink - public`, so a negative value
+means PrivateLink was faster. The p99.9 is based on roughly the slowest 10 pairs
+and is therefore especially sensitive to outliers.
 
 “Pairs where PrivateLink was faster” is the share of the 10,000 pairs in which
 the PrivateLink measurement had lower latency. It is not a speedup percentage.
@@ -69,14 +72,14 @@ For example, 97.82% at 4 MiB means PrivateLink was faster in 9,782 pairs; its
 median latency was about 9.4% lower, not 97.82% lower.
 
 
-| Response | Public p50 | PrivateLink p50 | Paired p50 delta | Pairs where PrivateLink was faster |
-| -------- | ---------- | --------------- | ---------------- | ---------------------------------- |
-| 1 KiB    | 1.658 ms   | 1.917 ms        | +0.257 ms        | 6.12%                              |
-| 16 KiB   | 1.915 ms   | 1.881 ms        | -0.032 ms        | 59.67%                             |
-| 64 KiB   | 2.321 ms   | 2.465 ms        | +0.139 ms        | 20.49%                             |
-| 256 KiB  | 4.053 ms   | 3.761 ms        | -0.292 ms        | 92.48%                             |
-| 1 MiB    | 11.038 ms  | 10.034 ms       | -1.019 ms        | 96.35%                             |
-| 4 MiB    | 41.127 ms  | 37.248 ms       | -3.827 ms        | 97.82%                             |
+| Response | Public p50 | PrivateLink p50 | Paired p50 delta | Paired p99 delta | Paired p99.9 delta | Pairs where PrivateLink was faster |
+| -------- | ---------- | --------------- | ---------------- | ---------------- | ------------------ | ---------------------------------- |
+| 1 KiB    | 1.658 ms   | 1.917 ms        | +0.257 ms        | +1.183 ms        | +3.151 ms          | 6.12%                              |
+| 16 KiB   | 1.915 ms   | 1.881 ms        | -0.032 ms        | +1.046 ms        | +3.276 ms          | 59.67%                             |
+| 64 KiB   | 2.321 ms   | 2.465 ms        | +0.139 ms        | +1.387 ms        | +3.586 ms          | 20.49%                             |
+| 256 KiB  | 4.053 ms   | 3.761 ms        | -0.292 ms        | +1.240 ms        | +4.346 ms          | 92.48%                             |
+| 1 MiB    | 11.038 ms  | 10.034 ms       | -1.019 ms        | +2.338 ms        | +11.325 ms         | 96.35%                             |
+| 4 MiB    | 41.127 ms  | 37.248 ms       | -3.827 ms        | +6.192 ms        | +27.930 ms         | 97.82%                             |
 
 
 At 64 KiB and below, differences stayed under 0.3 ms and changed direction.
